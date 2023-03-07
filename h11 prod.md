@@ -105,7 +105,57 @@ Aloitin tutustumalla Karvisen oppaaseen[1]. Päätin ohittaa Apachen asennuksen,
 
 <h2>TEHTÄVÄ KESKEN, palautettu 3.3.2023 n. 1355, jatketaan luultavastimyöhemmin</h2>
 
+[01:45] Päätin hyödyntää edellisen tehtäväkierroksen Django-projektiani. Annoin komennon <code>sudoedit /etc/apache2/sites-available/tuotantoasennus.conf</code>, editoin tiedosto ja tallensin sen.
 
+![23](https://user-images.githubusercontent.com/105177604/223415392-b6844518-4ccc-498f-9bb8-dafdb5072d65.JPG)
+
+[02:09] Ajoin komennon <code>sudo apt-get -y install libapache2-mod-wsgi-py3</code>. Jotakin meni vikaan.
+
+![24](https://user-images.githubusercontent.com/105177604/223415413-3daaf3eb-e5d2-4013-a83e-66b9089ae994.JPG)
+
+[02:17] Selvitin, että vika on kirjoitusviheessä ("WSGIDaemonpocess" vrt. "WSGIDaemonprocess") ja kävin korjaamassa sen. Ajoin äskeisen komennon uudestaan ilman virheitä.
+
+[02:22] Ajoin komennon <code>/sbin/apache2ctl configtest</code>. Sain virheilmoituksen <code>AH00543: apache2: bad user name Toimitusjohtaja</code>. Selasin itseni takaisin tuotantoasennus.conf-tiedostoon ja vaihdoin käyttäjäksi "matiask" sekä tallensin tiedoston.
+
+[03:18] Ajoin uudestaan komennon <code>/sbin/apache2ctl configtest</code>. Syntaksi oli ok, tosin sain AH00558-virheilmoituksen, jonka jätin huomioimatta.
+
+[03:19] Käynnistin Apachen uudelleen komennolla <code>sudo systemctl restart apache2</code>. Käytin komentoa <code>curl -s localhost|grep title</code>. Sain jälleen ilmoituksen "403 Forbidden", sama vika siis kuin aiemminkin.
+
+![25](https://user-images.githubusercontent.com/105177604/223415435-421ece58-4826-4036-942e-1196575fda16.JPG)
+
+[Päivä vaihtui, 7.3. 04:49] Ajoin summassa hirveän määrän komentoja uusiksi eri kansioissa.
+
+![26](https://user-images.githubusercontent.com/105177604/223415456-b73182f2-2f89-4b01-8e00-997800ad3c20.JPG)
+
+[05:22] Nyt näyttää hyvältä, pip on oikeassa paikassa
+
+![27](https://user-images.githubusercontent.com/105177604/223415477-6f0739e7-6b7f-4c30-9c2f-a3c59beb38b5.JPG)
+
+[05:25] Ajoin lisää komentoja.
+
+![28](https://user-images.githubusercontent.com/105177604/223415505-d8ca6f4d-444d-4292-bf3b-b5f75bd6db8c.JPG)
+
+[12:40] 
+
+Tutkin lokitiedostoja. Virheilmoitus AH01630: client denied by server configuration: /home/matiask/publicwsgi/tuotantoasennus/tuotantoasennus.
+
+![29](https://user-images.githubusercontent.com/105177604/223415527-3eebdac4-6b90-4e35-a3cd-8c3167a2f357.JPG)
+
+[13:30] Päättelin, että olen linkittänyt Apachen konffitiedostossa TDIR:n väärään paikkaan.
+
+[13:31] Muokkasin tiedostoa komennolla <code>sudoedit /etc/apache2/sites-available/tuotantoasennus.conf</code>. TDIR-poluksi muutin <code>/home/matiask/harjoituscompany</code>.
+
+![30](https://user-images.githubusercontent.com/105177604/223415555-0440c6b5-8099-43d9-9dc1-1811f5461d25.JPG)
+
+[13:46] Yritin Apachen uudelleenkäynnistystä, mutta mikään ei muuttunut. Arvelin, että myös wsgi.py-tiedoston pitäisi olla "samasta" paikasta kuin TDIR. (/home/matiask/harjoituscompany/harjoituscompany)
+
+![31](https://user-images.githubusercontent.com/105177604/223415582-1e5bc1c7-1263-4e4d-873f-e9b423e8ef00.JPG)
+
+[13:50] Käynnistin Apachen uudelleen. Käytin Curlia. Se toimi!
+
+![32](https://user-images.githubusercontent.com/105177604/223415601-d36f7934-02a2-4895-8348-aaaea5ce466a.JPG)
+
+<h3>Päivitetty palautusta 7.3. 1358. Jatkuu taas joskus... </h3>
 
 <h3>Lähteet</h3>
 
